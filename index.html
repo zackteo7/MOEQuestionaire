@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EDM Discovery Form</title>
+  <style>
+    body { font-family: Arial; max-width: 800px; margin: 40px auto; }
+    h2 { margin-top: 30px; }
+    label { display: block; margin-top: 10px; }
+    input, textarea, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      background: black;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>EDM / CRM Discovery Form</h1>
+
+<form action="https://formspree.io/f/mgopwjaj" method="POST">
+
+<h2>1. Volume & Frequency</h2>
+<label>How many EDMs per month?</label>
+<input type="text" name="volume_month">
+
+<label>Campaign type</label>
+<select name="campaign_type">
+  <option>One-off campaigns</option>
+  <option>Always-on newsletters</option>
+  <option>Both</option>
+</select>
+
+<label>Seasonal spikes?</label>
+<textarea name="seasonality"></textarea>
+
+
+<h2>2. Scope of Work</h2>
+<label>Strategy required?</label>
+<select name="strategy">
+  <option>Yes</option>
+  <option>No</option>
+</select>
+
+<label>Copywriting needed?</label>
+<select name="copywriting">
+  <option>Yes</option>
+  <option>No</option>
+</select>
+
+<label>Design type</label>
+<select name="design">
+  <option>Template-based</option>
+  <option>Custom each time</option>
+</select>
+
+<label>HTML complexity</label>
+<select name="html">
+  <option>Simple</option>
+  <option>Complex</option>
+</select>
+
+<label>Deployment responsibility</label>
+<select name="deployment">
+  <option>Client sends</option>
+  <option>Agency sends</option>
+</select>
+
+<label>Reporting level</label>
+<select name="reporting">
+  <option>Basic</option>
+  <option>Advanced</option>
+</select>
+
+
+<h2>3. Database & Segmentation</h2>
+<label>Database size</label>
+<input type="text" name="database_size">
+
+<label>Segmentation level</label>
+<select name="segmentation">
+  <option>Basic</option>
+  <option>Advanced</option>
+</select>
+
+<label>Automation flows needed?</label>
+<textarea name="automation"></textarea>
+
+<label>Personalisation requirements</label>
+<textarea name="personalisation"></textarea>
+
+
+<h2>4. Tools & Platforms</h2>
+<label>ESP used</label>
+<input type="text" name="esp">
+
+<label>Need platform setup?</label>
+<select name="platform_setup">
+  <option>Yes</option>
+  <option>No</option>
+</select>
+
+<label>Need integrations?</label>
+<select name="integration">
+  <option>Yes</option>
+  <option>No</option>
+</select>
+
+
+<h2>5. Creative Assets</h2>
+<label>Existing templates?</label>
+<select name="templates">
+  <option>Yes</option>
+  <option>No</option>
+</select>
+
+<label>Brand assets provided?</label>
+<select name="assets">
+  <option>Yes</option>
+  <option>No</option>
+</select>
+
+
+<h2>6. Approval Workflow</h2>
+<label>Number of stakeholders</label>
+<input type="text" name="stakeholders">
+
+<label>Revision rounds</label>
+<input type="text" name="revisions">
+
+<label>Turnaround expectation</label>
+<input type="text" name="turnaround">
+
+
+<h2>7. Performance Expectations</h2>
+<label>KPIs</label>
+<textarea name="kpis"></textarea>
+
+<label>A/B testing required?</label>
+<select name="ab_testing">
+  <option>Yes</option>
+  <option>No</option>
+</select>
+
+
+<h2>8. Compliance</h2>
+<label>Compliance requirements</label>
+<textarea name="compliance"></textarea>
+
+
+<h2>9. Reporting Depth</h2>
+<label>Reporting type</label>
+<select name="reporting_depth">
+  <option>Basic</option>
+  <option>Advanced</option>
+</select>
+
+
+<h2>10. Timeline</h2>
+<label>Campaign timelines</label>
+<textarea name="timeline"></textarea>
+
+<label>Rush jobs expected?</label>
+<select name="rush">
+  <option>Yes</option>
+  <option>No</option>
+</select>
+
+
+<h2>11. Ownership</h2>
+<label>Who owns list hygiene?</label>
+<input type="text" name="list_hygiene">
+
+<label>Who manages deliverability?</label>
+<input type="text" name="deliverability">
+
+<label>Scope coverage</label>
+<select name="ownership_scope">
+  <option>Execution only</option>
+  <option>End-to-end CRM</option>
+</select>
+
+
+<h2>12. Commercial Preference</h2>
+<label>Preferred pricing model</label>
+<select name="pricing">
+  <option>Per EDM</option>
+  <option>Monthly retainer</option>
+  <option>Campaign-based</option>
+</select>
+
+
+<h2>Final Question</h2>
+<label>Are you looking for execution support or a strategic CRM partner?</label>
+<select name="positioning">
+  <option>Execution</option>
+  <option>Strategic partner</option>
+</select>
+
+
+<button type="submit">Submit</button>
+
+</form>
+
+</body>
+</html>
