@@ -1,216 +1,1307 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>EDM Discovery Form</title>
-  <style>
-    body { font-family: Arial; max-width: 800px; margin: 40px auto; }
-    h2 { margin-top: 30px; }
-    label { display: block; margin-top: 10px; }
-    input, textarea, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-    }
-    button {
-      margin-top: 20px;
-      padding: 12px;
-      width: 100%;
-      background: black;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-  </style>
-</head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Receptionist / Admin — Candidate Screening | The Talent People</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+:root {
+  --blue:       #1F4E96;
+  --blue-dark:  #163a72;
+  --blue-mid:   #2c65b8;
+  --blue-light: #e8eef8;
+  --gold:       #C9A84C;
+  --gold-light: #fdf5e0;
+  --text:       #1a1a2e;
+  --muted:      #637087;
+  --border:     #d0d9ea;
+  --white:      #ffffff;
+  --bg:         #f2f5fb;
+  --error:      #c0392b;
+  --ok:         #16a34a;
+  --card-hover: #eef3fc;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--blue);
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-blocks {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+}
+.lb { width: 7px; border-radius: 1px; }
+.lb1 { height: 22px; background: #fff; }
+.lb2 { height: 14px; background: var(--gold); }
+.lb3 { height: 22px; background: #fff; }
+.logo-name {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+.header-sep { width: 1px; height: 28px; background: rgba(255,255,255,0.25); margin: 0 6px; }
+.header-sub { color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 300; }
+
+/* ── PROGRESS ── */
+.progress-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.step-labels {
+  display: flex;
+  gap: 0;
+  flex: 1;
+}
+.step-lbl {
+  flex: 1;
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 0 4px;
+  transition: color .3s;
+}
+.step-lbl.active { color: var(--blue); font-weight: 600; }
+.step-lbl.done   { color: var(--ok); }
+.progress-track {
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--blue-mid));
+  border-radius: 4px;
+  transition: width .4s ease;
+  width: 0%;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--blue);
+  padding: 32px 32px 40px;
+  margin-bottom: 28px;
+}
+.hero-tag {
+  display: inline-block;
+  background: var(--gold);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+}
+.hero-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  color: #fff;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+.hero-sub {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.6;
+  max-width: 520px;
+}
+.hero-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.pill {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.85);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+/* ── CONTAINER ── */
+.container { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+/* ── STEPS ── */
+.step { display: none; }
+.step.active { display: block; }
+
+/* ── SECTION CARD ── */
+.section {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.section-head {
+  background: var(--blue-light);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-num {
+  width: 24px; height: 24px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.section-title { font-weight: 600; font-size: 14px; color: var(--blue); }
+.section-body { padding: 20px; display: flex; flex-direction: column; gap: 18px; }
+
+/* ── FIELD ── */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 13.5px; font-weight: 500; }
+.field label .req { color: var(--error); margin-left: 2px; }
+.field .hint { font-size: 12px; color: var(--muted); margin-top: -4px; }
+
+input[type=text], input[type=email], input[type=tel],
+input[type=number], input[type=date], select, textarea {
+  width: 100%;
+  padding: 10px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--white);
+  transition: border-color .2s;
+  appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(31,78,150,0.08);
+}
+input.error, select.error, textarea.error {
+  border-color: var(--error);
+}
+textarea { resize: vertical; min-height: 80px; }
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:520px){ .field-row { grid-template-columns: 1fr; } }
+
+/* Radio / checkbox choices */
+.choices { display: flex; flex-direction: column; gap: 8px; }
+.choices.inline { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  padding: 9px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 13.5px;
+  transition: border-color .2s, background .2s;
+  user-select: none;
+}
+.choice:hover { border-color: var(--blue); background: var(--blue-light); }
+.choice input[type=radio],
+.choice input[type=checkbox] { accent-color: var(--blue); width: 16px; height: 16px; flex-shrink: 0; }
+.choice.selected { border-color: var(--blue); background: var(--blue-light); }
+
+/* ── SCHOOL CARDS ── */
+.school-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media(max-width:520px){ .school-grid { grid-template-columns: 1fr; } }
+
+.school-card {
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s, transform .15s;
+  position: relative;
+  user-select: none;
+}
+.school-card:hover {
+  border-color: var(--blue);
+  background: var(--card-hover);
+  transform: translateY(-1px);
+}
+.school-card.selected {
+  border-color: var(--blue);
+  background: var(--blue-light);
+  box-shadow: 0 0 0 3px rgba(31,78,150,0.1);
+}
+.school-card input[type=radio] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.school-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--blue);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+.school-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.school-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.school-detail .ico { font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+.school-badge {
+  display: inline-block;
+  margin-top: 10px;
+  background: var(--gold-light);
+  border: 1px solid var(--gold);
+  color: #7a5e1a;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+.school-card.selected .school-badge {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+.selected-tick {
+  position: absolute;
+  top: 10px; right: 12px;
+  font-size: 18px;
+  color: var(--blue);
+  display: none;
+}
+.school-card.selected .selected-tick { display: block; }
+
+/* Error text */
+.err-msg { font-size: 12px; color: var(--error); display: none; }
+.err-msg.show { display: block; }
+
+/* Validation banner */
+.val-banner {
+  background: #fff1f1;
+  border: 1px solid #f5c6c6;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--error);
+  display: none;
+  margin-bottom: 16px;
+}
+.val-banner.show { display: block; }
+
+/* ── BUTTONS ── */
+.btn-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  gap: 12px;
+}
+.btn {
+  padding: 13px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: background .2s, transform .1s;
+}
+.btn:active { transform: scale(.98); }
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+  margin-left: auto;
+}
+.btn-primary:hover { background: var(--blue-dark); }
+.btn-back {
+  background: transparent;
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+}
+.btn-back:hover { border-color: var(--blue); color: var(--blue); }
+.btn-submit {
+  background: var(--gold);
+  color: #fff;
+  margin-left: auto;
+}
+.btn-submit:hover { background: #b08a35; }
+
+/* ── SUCCESS ── */
+#success-screen {
+  display: none;
+  text-align: center;
+  padding: 60px 20px;
+}
+.success-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+.success-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  color: var(--blue);
+  margin-bottom: 10px;
+}
+.success-sub {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 420px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+.success-note {
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--blue);
+  color: rgba(255,255,255,0.55);
+  text-align: center;
+  padding: 18px 20px;
+  font-size: 11.5px;
+  margin-top: 40px;
+  line-height: 1.7;
+}
+.footer strong { color: rgba(255,255,255,0.85); }
+
+/* PDPA box */
+.pdpa-box {
+  background: #f8f9fe;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+</style>
+</head>
 <body>
 
-<h1>EDM / CRM Discovery Form</h1>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-blocks">
+      <div class="lb lb1"></div>
+      <div class="lb lb2"></div>
+      <div class="lb lb3"></div>
+    </div>
+    <span class="logo-name">The Talent People</span>
+  </div>
+  <div class="header-sep"></div>
+  <span class="header-sub">EA Licence No. 24C2589</span>
+</div>
 
-<form action="https://formspree.io/f/mgopwjaj" method="POST">
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div style="width:100%; position:relative;">
+    <div class="step-labels">
+      <div class="step-lbl active" id="lbl-1">Your Details</div>
+      <div class="step-lbl" id="lbl-2">School</div>
+      <div class="step-lbl" id="lbl-3">Experience</div>
+      <div class="step-lbl" id="lbl-4">Submit</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+</div>
 
-<h2>1. Volume & Frequency</h2>
-<label>How many EDMs per month?</label>
-<input type="text" name="volume_month">
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-tag">MOE School Placement</div>
+    <div class="hero-title">Receptionist cum<br>Admin Assistant</div>
+    <div class="hero-sub">Thank you for your interest. This form takes about 5 minutes and helps us assess your suitability for placement at one of our client schools.</div>
+    <div class="hero-pills">
+      <span class="pill">📍 Multiple Locations</span>
+      <span class="pill">🕐 Mon–Fri, 7:30am–5:00pm</span>
+      <span class="pill">📄 1-Year Contract</span>
+    </div>
+  </div>
+</div>
 
-<label>Campaign type</label>
-<select name="campaign_type">
-  <option>One-off campaigns</option>
-  <option>Always-on newsletters</option>
-  <option>Both</option>
-</select>
+<!-- FORM AREA -->
+<div class="container">
 
-<label>Seasonal spikes?</label>
-<textarea name="seasonality"></textarea>
+<!-- ==================== STEP 1: Personal Details ==================== -->
+<form id="screen-form" method="POST" action="https://formspree.io/f/mgopwjaj" novalidate>
+<input type="hidden" name="_subject" id="form-subject" value="School Screening – Receptionist/Admin">
+<input type="hidden" name="school_applied" id="hidden-school" value="">
+<input type="hidden" name="role_applied" id="hidden-role" value="">
+<input type="hidden" name="school_location" id="hidden-location" value="">
+<input type="hidden" name="school_period" id="hidden-period" value="">
+<input type="hidden" name="_gotcha" style="display:none">
 
+<div class="step active" id="step-1">
 
-<h2>2. Scope of Work</h2>
-<label>Strategy required?</label>
-<select name="strategy">
-  <option>Yes</option>
-  <option>No</option>
-</select>
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">1</div>
+      <span class="section-title">Your Personal Details</span>
+    </div>
+    <div class="section-body">
 
-<label>Copywriting needed?</label>
-<select name="copywriting">
-  <option>Yes</option>
-  <option>No</option>
-</select>
+      <div class="field-row">
+        <div class="field">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" name="full_name" id="full_name" placeholder="As in NRIC / FIN" required />
+        </div>
+        <div class="field">
+          <label>Date of Birth <span class="req">*</span></label>
+          <input type="date" name="dob" id="dob" required />
+        </div>
+      </div>
 
-<label>Design type</label>
-<select name="design">
-  <option>Template-based</option>
-  <option>Custom each time</option>
-</select>
+      <div class="field-row">
+        <div class="field">
+          <label>Mobile Number <span class="req">*</span></label>
+          <input type="tel" name="mobile" placeholder="+65 XXXX XXXX" required />
+        </div>
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" name="email" placeholder="your@email.com" required />
+        </div>
+      </div>
 
-<label>HTML complexity</label>
-<select name="html">
-  <option>Simple</option>
-  <option>Complex</option>
-</select>
+      <div class="field">
+        <label>Nationality / Work Pass Status <span class="req">*</span></label>
+        <select name="work_status" id="work_status" required onchange="toggleNationality()">
+          <option value="" disabled selected>Select…</option>
+          <option>Singapore Citizen</option>
+          <option>Singapore PR</option>
+          <option>Employment Pass</option>
+          <option>S Pass</option>
+          <option>Work Permit</option>
+          <option>Other</option>
+        </select>
+      </div>
 
-<label>Deployment responsibility</label>
-<select name="deployment">
-  <option>Client sends</option>
-  <option>Agency sends</option>
-</select>
+      <div class="field" id="nationality-field" style="display:none">
+        <label>Nationality <span class="req">*</span></label>
+        <input type="text" name="nationality" placeholder="e.g. Malaysian, Indian, Filipino…" />
+        <span class="hint">Required if you hold a Work Pass or S Pass.</span>
+      </div>
 
-<label>Reporting level</label>
-<select name="reporting">
-  <option>Basic</option>
-  <option>Advanced</option>
-</select>
+      <div class="field-row">
+        <div class="field">
+          <label>Current Monthly Salary (SGD) <span class="req">*</span></label>
+          <input type="number" name="current_salary" placeholder="e.g. 2800" min="0" required />
+        </div>
+        <div class="field">
+          <label>Expected Monthly Salary (SGD) <span class="req">*</span></label>
+          <input type="number" name="expected_salary" placeholder="e.g. 3000" min="0" required />
+        </div>
+      </div>
 
+      <div class="field">
+        <label>Notice Period / Earliest Available Date <span class="req">*</span></label>
+        <select name="notice_period" required>
+          <option value="" disabled selected>Select…</option>
+          <option>Immediate</option>
+          <option>1 week</option>
+          <option>2 weeks</option>
+          <option>1 month</option>
+          <option>2 months</option>
+          <option>More than 2 months</option>
+        </select>
+      </div>
 
-<h2>3. Database & Segmentation</h2>
-<label>Database size</label>
-<input type="text" name="database_size">
+    </div>
+  </div>
 
-<label>Segmentation level</label>
-<select name="segmentation">
-  <option>Basic</option>
-  <option>Advanced</option>
-</select>
+  <div class="val-banner" id="val-1">Please fill in all required fields before continuing.</div>
+  <div class="btn-row">
+    <button type="button" class="btn btn-primary" onclick="goStep(2)">Next — Choose School →</button>
+  </div>
 
-<label>Automation flows needed?</label>
-<textarea name="automation"></textarea>
-
-<label>Personalisation requirements</label>
-<textarea name="personalisation"></textarea>
-
-
-<h2>4. Tools & Platforms</h2>
-<label>ESP used</label>
-<input type="text" name="esp">
-
-<label>Need platform setup?</label>
-<select name="platform_setup">
-  <option>Yes</option>
-  <option>No</option>
-</select>
-
-<label>Need integrations?</label>
-<select name="integration">
-  <option>Yes</option>
-  <option>No</option>
-</select>
-
-
-<h2>5. Creative Assets</h2>
-<label>Existing templates?</label>
-<select name="templates">
-  <option>Yes</option>
-  <option>No</option>
-</select>
-
-<label>Brand assets provided?</label>
-<select name="assets">
-  <option>Yes</option>
-  <option>No</option>
-</select>
-
-
-<h2>6. Approval Workflow</h2>
-<label>Number of stakeholders</label>
-<input type="text" name="stakeholders">
-
-<label>Revision rounds</label>
-<input type="text" name="revisions">
-
-<label>Turnaround expectation</label>
-<input type="text" name="turnaround">
-
-
-<h2>7. Performance Expectations</h2>
-<label>KPIs</label>
-<textarea name="kpis"></textarea>
-
-<label>A/B testing required?</label>
-<select name="ab_testing">
-  <option>Yes</option>
-  <option>No</option>
-</select>
-
-
-<h2>8. Compliance</h2>
-<label>Compliance requirements</label>
-<textarea name="compliance"></textarea>
-
-
-<h2>9. Reporting Depth</h2>
-<label>Reporting type</label>
-<select name="reporting_depth">
-  <option>Basic</option>
-  <option>Advanced</option>
-</select>
-
-
-<h2>10. Timeline</h2>
-<label>Campaign timelines</label>
-<textarea name="timeline"></textarea>
-
-<label>Rush jobs expected?</label>
-<select name="rush">
-  <option>Yes</option>
-  <option>No</option>
-</select>
+</div><!-- /step-1 -->
 
 
-<h2>11. Ownership</h2>
-<label>Who owns list hygiene?</label>
-<input type="text" name="list_hygiene">
+<!-- ==================== STEP 2: School Selection ==================== -->
+<div class="step" id="step-2">
 
-<label>Who manages deliverability?</label>
-<input type="text" name="deliverability">
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">2</div>
+      <span class="section-title">Which school are you applying for?</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:var(--muted);margin-top:-6px;">Select the school you are being considered for. Your consultant will advise if you are suitable for more than one.</p>
 
-<label>Scope coverage</label>
-<select name="ownership_scope">
-  <option>Execution only</option>
-  <option>End-to-end CRM</option>
-</select>
+      <div class="school-grid">
+
+        <!-- Montfort Junior -->
+        <div class="school-card" onclick="selectSchool(this, 'Montfort Junior School', 'Hougang, Singapore', 'Jun 2026 – May 2027', 'School Attendant')">
+          <input type="radio" name="_school_select" value="Montfort Junior School" />
+          <span class="selected-tick">✓</span>
+          <div class="school-name">Montfort Junior School</div>
+          <div class="school-details">
+            <div class="school-detail"><span class="ico">📍</span>Hougang</div>
+            <div class="school-detail"><span class="ico">🕐</span>Rotating shifts, 6:00am – 6:30pm</div>
+            <div class="school-detail"><span class="ico">📄</span>Jun 2026 – May 2027</div>
+          </div>
+          <span class="school-badge">School Attendant</span>
+        </div>
+
+        <!-- Seng Kang Secondary -->
+        <div class="school-card" onclick="selectSchool(this, 'Seng Kang Secondary School', '10 Compassvale Lane, Singapore 545090', 'Jun 2026 – May 2027', 'Receptionist-cum-Admin Assistant')">
+          <input type="radio" name="_school_select" value="Seng Kang Secondary School" />
+          <span class="selected-tick">✓</span>
+          <div class="school-name">Seng Kang Secondary School</div>
+          <div class="school-details">
+            <div class="school-detail"><span class="ico">📍</span>10 Compassvale Lane</div>
+            <div class="school-detail"><span class="ico">🕐</span>Mon–Fri, 7:30am – 5:00pm</div>
+            <div class="school-detail"><span class="ico">📄</span>Jun 2026 – May 2027</div>
+          </div>
+          <span class="school-badge">Receptionist / Admin</span>
+        </div>
+
+        <!-- DSS -->
+        <div class="school-card" onclick="selectSchool(this, 'DSS', 'Singapore', 'Jun 2026 – May 2027', 'Receptionist-cum-Admin Assistant')">
+          <input type="radio" name="_school_select" value="DSS" />
+          <span class="selected-tick">✓</span>
+          <div class="school-name">DSS</div>
+          <div class="school-details">
+            <div class="school-detail"><span class="ico">📍</span>Singapore</div>
+            <div class="school-detail"><span class="ico">🕐</span>Mon–Fri, 7:30am – 5:00pm</div>
+            <div class="school-detail"><span class="ico">📄</span>Jun 2026 – May 2027</div>
+          </div>
+          <span class="school-badge">Receptionist / Admin</span>
+        </div>
+
+        <!-- Jurong Primary -->
+        <div class="school-card" onclick="selectSchool(this, 'Jurong Primary School', '320 Jurong East Street 32, S609476', 'Jul 2026 – Jun 2027', 'Operations Support Officer (OSO)')">
+          <input type="radio" name="_school_select" value="Jurong Primary School" />
+          <span class="selected-tick">✓</span>
+          <div class="school-name">Jurong Primary School</div>
+          <div class="school-details">
+            <div class="school-detail"><span class="ico">📍</span>320 Jurong East Street 32</div>
+            <div class="school-detail"><span class="ico">🕐</span>Rotating shifts, 6:00am – 6:30pm</div>
+            <div class="school-detail"><span class="ico">📄</span>Jul 2026 – Jun 2027</div>
+          </div>
+          <span class="school-badge">Operations Support Officer</span>
+        </div>
+
+      </div>
+
+      <div class="err-msg" id="school-err">Please select a school before continuing.</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button type="button" class="btn btn-back" onclick="goStep(1)">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="goStep(3)">Next — Experience →</button>
+  </div>
+
+</div><!-- /step-2 -->
 
 
-<h2>12. Commercial Preference</h2>
-<label>Preferred pricing model</label>
-<select name="pricing">
-  <option>Per EDM</option>
-  <option>Monthly retainer</option>
-  <option>Campaign-based</option>
-</select>
+<!-- ==================== STEP 3: Screening Questions (role-aware) ==================== -->
+<div class="step" id="step-3">
+
+  <!-- Role indicator banner -->
+  <div id="role-banner" style="background:var(--blue-light);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--blue);font-weight:500;display:none;">
+    ✦ Answering questions for: <span id="role-banner-text"></span>
+  </div>
+
+  <!-- ===== BLOCK A: Receptionist / Admin (Seng Kang, DSS) ===== -->
+  <div class="qs-block" id="qs-admin" style="display:none;">
+
+    <div class="section">
+      <div class="section-head">
+        <div class="section-num">3</div>
+        <span class="section-title">Front Office & Admin Experience</span>
+      </div>
+      <div class="section-body">
+
+        <div class="field">
+          <label>How many years of front office / reception / admin experience do you have? <span class="req">*</span></label>
+          <select name="admin_years_exp">
+            <option value="" disabled selected>Select…</option>
+            <option>Less than 1 year</option>
+            <option>1 – 2 years</option>
+            <option>3 – 5 years</option>
+            <option>6 – 10 years</option>
+            <option>More than 10 years</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Have you worked as a Receptionist or PA to Management / C-suite? <span class="req">*</span></label>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="admin_recep_pa" value="Yes – Receptionist" /><span>Yes — as a Receptionist</span></label>
+            <label class="choice"><input type="radio" name="admin_recep_pa" value="Yes – PA / Secretary" /><span>Yes — as a PA / Secretary</span></label>
+            <label class="choice"><input type="radio" name="admin_recep_pa" value="Yes – both" /><span>Yes — both</span></label>
+            <label class="choice"><input type="radio" name="admin_recep_pa" value="No" /><span>No</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Have you previously worked in a school or educational institution?</label>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="admin_school_exp" value="Yes" /><span>Yes</span></label>
+            <label class="choice"><input type="radio" name="admin_school_exp" value="No" /><span>No</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Briefly describe your most relevant receptionist / admin role.</label>
+          <textarea name="admin_role_desc" placeholder="e.g. Front desk at XYZ Corp — managed calls, visitor registration, mail, and general admin for 3 years." rows="3"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <div class="section-num">4</div>
+        <span class="section-title">Skills & Availability</span>
+      </div>
+      <div class="section-body">
+
+        <div class="field">
+          <label>Microsoft Office proficiency (Word, Excel) <span class="req">*</span></label>
+          <select name="admin_ms_office">
+            <option value="" disabled selected>Select…</option>
+            <option>Basic – simple tasks only</option>
+            <option>Intermediate – comfortable with most functions</option>
+            <option>Advanced – formulas, formatting, mail merge</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Languages you can communicate in <span class="req">*</span></label>
+          <div class="choices">
+            <label class="choice"><input type="checkbox" name="admin_languages" value="English (spoken and written)" /><span>English — spoken and written</span></label>
+            <label class="choice"><input type="checkbox" name="admin_languages" value="Mandarin" /><span>Mandarin</span></label>
+            <label class="choice"><input type="checkbox" name="admin_languages" value="Malay" /><span>Malay</span></label>
+            <label class="choice"><input type="checkbox" name="admin_languages" value="Tamil" /><span>Tamil</span></label>
+            <label class="choice"><input type="checkbox" name="admin_languages" value="Other" /><span>Other</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Do you hold a valid First Aid / CPR certification?</label>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="admin_first_aid" value="Yes – currently valid" /><span>Yes — currently valid</span></label>
+            <label class="choice"><input type="radio" name="admin_first_aid" value="Expired" /><span>Previously certified (expired)</span></label>
+            <label class="choice"><input type="radio" name="admin_first_aid" value="No" /><span>No</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Are you comfortable with the 7:30am start time? <span class="req">*</span></label>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="admin_early_start" value="Yes, comfortable" /><span>Yes, comfortable</span></label>
+            <label class="choice"><input type="radio" name="admin_early_start" value="Prefer later start" /><span>Prefer later start</span></label>
+            <label class="choice"><input type="radio" name="admin_early_start" value="Need to check" /><span>Need to check</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Highest Educational Qualification <span class="req">*</span></label>
+          <select name="admin_education">
+            <option value="" disabled selected>Select…</option>
+            <option>PSLE / Primary School</option>
+            <option>GCE N Level</option>
+            <option>GCE O Level</option>
+            <option>GCE A Level</option>
+            <option>ITE / NiTEC Certificate</option>
+            <option>Diploma</option>
+            <option>Advanced Diploma</option>
+            <option>Degree (Bachelor's)</option>
+            <option>Postgraduate (Master's / PhD)</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /qs-admin -->
 
 
-<h2>Final Question</h2>
-<label>Are you looking for execution support or a strategic CRM partner?</label>
-<select name="positioning">
-  <option>Execution</option>
-  <option>Strategic partner</option>
-</select>
+  <!-- ===== BLOCK B: School Attendant (Montfort Junior) ===== -->
+  <div class="qs-block" id="qs-attendant" style="display:none;">
+
+    <div class="section">
+      <div class="section-head">
+        <div class="section-num">3</div>
+        <span class="section-title">Work Experience</span>
+      </div>
+      <div class="section-body">
+
+        <div class="field">
+          <label>How many years of relevant experience do you have? (cleaning, facilities, general duties, security) <span class="req">*</span></label>
+          <select name="att_years_exp">
+            <option value="" disabled selected>Select…</option>
+            <option>Less than 1 year</option>
+            <option>1 – 2 years</option>
+            <option>2 – 3 years</option>
+            <option>3 – 5 years</option>
+            <option>More than 5 years</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Which of the following have you done before? (select all that apply) <span class="req">*</span></label>
+          <div class="choices">
+            <label class="choice"><input type="checkbox" name="att_duties" value="General cleaning (classrooms, toilets, common areas)" /><span>General cleaning — classrooms, toilets, common areas</span></label>
+            <label class="choice"><input type="checkbox" name="att_duties" value="Event logistics (moving furniture, setting up)" /><span>Event logistics — moving furniture, setting up</span></label>
+            <label class="choice"><input type="checkbox" name="att_duties" value="School / building opening and closing" /><span>School or building opening and closing duties</span></label>
+            <label class="choice"><input type="checkbox" name="att_duties" value="Traffic control / car park duties" /><span>Traffic control or car park duties</span></label>
+            <label class="choice"><input type="checkbox" name="att_duties" value="Security / guard duties" /><span>Security or guard duties</span></label>
+            <label class="choice"><input type="checkbox" name="att_duties" value="None of the above" /><span>None of the above</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Have you previously worked in a school or educational institution?</label>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="att_school_exp" value="Yes" /><span>Yes</span></label>
+            <label class="choice"><input type="radio" name="att_school_exp" value="No" /><span>No</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Briefly describe your most relevant past role.</label>
+          <textarea name="att_role_desc" placeholder="e.g. Cleaner at ABC Primary School for 2 years — daily cleaning, event set-up, gate duties." rows="3"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <div class="section-num">4</div>
+        <span class="section-title">Fitness, Availability & NS Status</span>
+      </div>
+      <div class="section-body">
+
+        <div class="field">
+          <label>Are you comfortable with physical work — lifting, moving equipment, prolonged standing? <span class="req">*</span></label>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="att_physical_ok" value="Yes, fully comfortable" /><span>Yes, fully comfortable</span></label>
+            <label class="choice"><input type="radio" name="att_physical_ok" value="Comfortable with light physical work" /><span>Comfortable with light work only</span></label>
+            <label class="choice"><input type="radio" name="att_physical_ok" value="Have physical limitations" /><span>I have physical limitations</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Do you have any medical conditions or physical limitations we should be aware of?</label>
+          <textarea name="att_medical" placeholder="Leave blank if none. E.g. knee injury, blood pressure." rows="2"></textarea>
+        </div>
+
+        <div class="field">
+          <label>This role involves rotating shifts starting as early as 6:00am. Are you able to commit to this? <span class="req">*</span></label>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="att_shift_ok" value="Yes, comfortable with 6am start" /><span>Yes, comfortable</span></label>
+            <label class="choice"><input type="radio" name="att_shift_ok" value="Prefer later shift only" /><span>Prefer later shift only</span></label>
+            <label class="choice"><input type="radio" name="att_shift_ok" value="Need to check" /><span>Need to check</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Gender</label>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="att_gender" value="Male" /><span>Male</span></label>
+            <label class="choice"><input type="radio" name="att_gender" value="Female" /><span>Female</span></label>
+            <label class="choice"><input type="radio" name="att_gender" value="Prefer not to say" /><span>Prefer not to say</span></label>
+          </div>
+        </div>
+
+        <div class="field" id="att-ns-field" style="display:none;">
+          <label>Have you completed National Service (NS)? <span class="req">*</span></label>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="att_ns" value="Yes – completed NS" /><span>Yes, completed</span></label>
+            <label class="choice"><input type="radio" name="att_ns" value="Exempt / Not applicable" /><span>Exempt / Not applicable</span></label>
+            <label class="choice"><input type="radio" name="att_ns" value="Not yet completed" /><span>Not yet completed</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Can you read, speak, and understand basic English? <span class="req">*</span></label>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="att_english" value="Yes" /><span>Yes</span></label>
+            <label class="choice"><input type="radio" name="att_english" value="Basic level only" /><span>Basic level only</span></label>
+            <label class="choice"><input type="radio" name="att_english" value="Limited" /><span>Limited</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Highest Educational Qualification</label>
+          <select name="att_education">
+            <option value="" disabled selected>Select…</option>
+            <option>No formal qualifications</option>
+            <option>PSLE / Primary School</option>
+            <option>GCE N Level</option>
+            <option>GCE O Level</option>
+            <option>GCE A Level</option>
+            <option>ITE / NiTEC Certificate</option>
+            <option>Diploma or above</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /qs-attendant -->
 
 
-<button type="submit">Submit</button>
+  <!-- ===== BLOCK C: Operations Support Officer (Jurong Primary) ===== -->
+  <div class="qs-block" id="qs-oso" style="display:none;">
+
+    <div class="section">
+      <div class="section-head">
+        <div class="section-num">3</div>
+        <span class="section-title">Operations & Logistics Experience</span>
+      </div>
+      <div class="section-body">
+
+        <div class="field">
+          <label>How many years of relevant experience do you have? (operations, logistics, security, cleaning, facilities) <span class="req">*</span></label>
+          <select name="oso_years_exp">
+            <option value="" disabled selected>Select…</option>
+            <option>Less than 1 year</option>
+            <option>1 – 2 years</option>
+            <option>2 – 3 years</option>
+            <option>3 – 5 years</option>
+            <option>More than 5 years</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Which of the following have you done before? (select all that apply) <span class="req">*</span></label>
+          <div class="choices">
+            <label class="choice"><input type="checkbox" name="oso_duties" value="School / premises security and access control" /><span>School or premises security and access control</span></label>
+            <label class="choice"><input type="checkbox" name="oso_duties" value="Stock and inventory management" /><span>Stock and inventory management</span></label>
+            <label class="choice"><input type="checkbox" name="oso_duties" value="Vendor or contractor coordination" /><span>Vendor or contractor coordination</span></label>
+            <label class="choice"><input type="checkbox" name="oso_duties" value="Event logistics (setting up, moving furniture)" /><span>Event logistics — setting up, moving furniture</span></label>
+            <label class="choice"><input type="checkbox" name="oso_duties" value="Cleaning or facilities maintenance" /><span>Cleaning or facilities maintenance</span></label>
+            <label class="choice"><input type="checkbox" name="oso_duties" value="None of the above" /><span>None of the above</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Have you previously worked in a school or educational institution?</label>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="oso_school_exp" value="Yes" /><span>Yes</span></label>
+            <label class="choice"><input type="radio" name="oso_school_exp" value="No" /><span>No</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Briefly describe your most relevant past role.</label>
+          <textarea name="oso_role_desc" placeholder="e.g. Operations Assistant at ABC school — coordinated vendors, maintained supplies, supported event logistics for 2 years." rows="3"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <div class="section-num">4</div>
+        <span class="section-title">Fitness, Availability & Communication</span>
+      </div>
+      <div class="section-body">
+
+        <div class="field">
+          <label>Are you comfortable with physical work — lifting, moving equipment, prolonged standing? <span class="req">*</span></label>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="oso_physical_ok" value="Yes, fully comfortable" /><span>Yes, fully comfortable</span></label>
+            <label class="choice"><input type="radio" name="oso_physical_ok" value="Comfortable with moderate work" /><span>Comfortable with moderate work</span></label>
+            <label class="choice"><input type="radio" name="oso_physical_ok" value="Have physical limitations" /><span>I have physical limitations</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>This role has rotating shifts starting as early as 6:00am (Mon–Thu 6am–3pm or 9:30am–6:30pm; Fri 6am–2:30pm or 10am–6:30pm). Are you able to commit? <span class="req">*</span></label>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="oso_shift_ok" value="Yes – comfortable with either shift" /><span>Yes — comfortable with either shift</span></label>
+            <label class="choice"><input type="radio" name="oso_shift_ok" value="Prefer morning shift only (6am start)" /><span>Prefer morning shift only (6am start)</span></label>
+            <label class="choice"><input type="radio" name="oso_shift_ok" value="Prefer afternoon shift only" /><span>Prefer afternoon/later shift only</span></label>
+            <label class="choice"><input type="radio" name="oso_shift_ok" value="Need to check" /><span>Need to check</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Can you communicate effectively in English (spoken)? <span class="req">*</span></label>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="oso_english" value="Yes – comfortable" /><span>Yes, comfortable</span></label>
+            <label class="choice"><input type="radio" name="oso_english" value="Basic level" /><span>Basic level</span></label>
+            <label class="choice"><input type="radio" name="oso_english" value="Limited" /><span>Limited</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Do you have any medical conditions or physical limitations we should be aware of?</label>
+          <textarea name="oso_medical" placeholder="Leave blank if none. E.g. knee injury, high blood pressure." rows="2"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Highest Educational Qualification</label>
+          <select name="oso_education">
+            <option value="" disabled selected>Select…</option>
+            <option>No formal qualifications</option>
+            <option>PSLE / Primary School</option>
+            <option>GCE N Level</option>
+            <option>GCE O Level</option>
+            <option>GCE A Level</option>
+            <option>ITE / NiTEC Certificate</option>
+            <option>Diploma or above</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /qs-oso -->
+
+  <div class="val-banner" id="val-3">Please answer all required questions before continuing.</div>
+  <div class="btn-row">
+    <button type="button" class="btn btn-back" onclick="goStep(2)">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="goStep(4)">Next — Submit →</button>
+  </div>
+
+</div><!-- /step-3 -->
+
+
+<!-- ==================== STEP 4: Final ==================== -->
+<div class="step" id="step-4">
+
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">5</div>
+      <span class="section-title">Final Details</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <label>How did you hear about this role?</label>
+        <select name="referral_source">
+          <option value="" disabled selected>Select…</option>
+          <option>WhatsApp from recruiter</option>
+          <option>JobStreet</option>
+          <option>LinkedIn</option>
+          <option>MyCareersFuture</option>
+          <option>Indeed</option>
+          <option>Referral from friend / colleague</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Anything else you'd like us to know?</label>
+        <textarea name="additional_info" rows="3" placeholder="E.g. specific scheduling constraints, relevant certifications not mentioned, or any questions for the recruiter." maxlength="600"></textarea>
+      </div>
+
+      <div class="field">
+        <div class="pdpa-box">
+          <strong>Data Protection Notice</strong><br>
+          The Talent People Pte. Ltd. (EA Licence: 24C2589) collects your personal data solely for the purpose of evaluating your suitability for the role(s) above. Your information will not be shared with third parties without your consent, and will be handled in accordance with the Personal Data Protection Act (PDPA) 2012 (Singapore). You may withdraw consent at any time by contacting us.
+        </div>
+        <label class="choice" style="align-items:flex-start; gap:10px;">
+          <input type="checkbox" name="pdpa_consent" id="pdpa_consent" value="Agreed" required style="margin-top:3px;" />
+          <span style="font-size:13px;">I consent to The Talent People Pte. Ltd. collecting and using my personal data for recruitment purposes as described above. <span class="req">*</span></span>
+        </label>
+        <div class="err-msg" id="pdpa-err">You must agree to the data protection notice to submit.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="val-banner" id="val-4">Please complete all required fields and agree to the PDPA notice.</div>
+  <div class="btn-row">
+    <button type="button" class="btn btn-back" onclick="goStep(3)">← Back</button>
+    <button type="submit" class="btn btn-submit" id="submit-btn">Submit Application ✓</button>
+  </div>
+
+</div><!-- /step-4 -->
 
 </form>
 
+<!-- ==================== SUCCESS ==================== -->
+<div id="success-screen">
+  <div class="section" style="padding:40px 24px; text-align:center;">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Application Received!</div>
+    <div class="success-sub">
+      Thank you for completing the screening form. Our team will review your response and be in touch within 1–2 business days.
+    </div>
+    <div class="success-note">
+      <strong>The Talent People Pte. Ltd.</strong> · EA Licence: 24C2589<br>
+      75 High Street, Singapore 179435 · hello@thetalentpeople.co
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <strong>The Talent People Pte. Ltd.</strong> · EA Licence No. 24C2589 · UEN: 202432943E<br>
+  75 High Street, Singapore 179435 · <a href="https://TheTalentPeople.co" style="color:rgba(255,255,255,0.6)">TheTalentPeople.co</a><br>
+  This form is confidential. Responses are processed solely for recruitment purposes.
+</div>
+
+<script>
+// ── URL Param Pre-fill ──
+(function(){
+  const p = new URLSearchParams(window.location.search);
+  if(p.get('name')) document.getElementById('full_name').value = p.get('name');
+  if(p.get('school')){
+    const schoolName = p.get('school');
+    const loc = p.get('location') || 'Singapore';
+    const period = p.get('period') || 'Jun 2026 – May 2027';
+    // Try to auto-select matching school card
+    document.querySelectorAll('.school-card').forEach(card => {
+      const cardSchool = card.querySelector('.school-name').textContent.trim();
+      if(cardSchool.toLowerCase().includes(schoolName.toLowerCase()) ||
+         schoolName.toLowerCase().includes(cardSchool.toLowerCase())){
+        selectSchool(card, cardSchool, loc, period);
+      }
+    });
+  }
+})();
+
+// ── Nationality toggle ──
+function toggleNationality(){
+  const v = document.getElementById('work_status').value;
+  const show = ['Employment Pass','S Pass','Work Permit','Other'].includes(v);
+  document.getElementById('nationality-field').style.display = show ? 'block' : 'none';
+}
+
+// ── School card selection ──
+let selectedSchool = null;
+let activeRole = null; // 'admin' | 'attendant' | 'oso'
+
+function selectSchool(card, name, location, period, role){
+  document.querySelectorAll('.school-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  card.querySelector('input[type=radio]').checked = true;
+  selectedSchool = { name, location, period, role };
+  document.getElementById('hidden-school').value = name;
+  document.getElementById('hidden-role').value = role || 'Receptionist-cum-Admin Assistant';
+  document.getElementById('hidden-location').value = location;
+  document.getElementById('hidden-period').value = period;
+  document.getElementById('school-err').classList.remove('show');
+  document.getElementById('form-subject').value = 'School Screening – ' + name + ' | ' + (role || 'Receptionist/Admin');
+
+  // Determine active question block
+  if(role === 'School Attendant') activeRole = 'attendant';
+  else if(role === 'Operations Support Officer (OSO)') activeRole = 'oso';
+  else activeRole = 'admin';
+}
+
+// ── NS field toggle (School Attendant) ──
+document.addEventListener('change', function(e){
+  if(e.target.name === 'att_gender'){
+    const nsField = document.getElementById('att-ns-field');
+    nsField.style.display = e.target.value === 'Male' ? 'block' : 'none';
+  }
+});
+
+// ── Radio/checkbox visual highlight ──
+document.querySelectorAll('.choice input').forEach(inp => {
+  inp.addEventListener('change', function(){
+    if(this.type === 'radio'){
+      const name = this.name;
+      document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+        r.closest('.choice').classList.remove('selected');
+      });
+    }
+    if(this.checked) this.closest('.choice').classList.add('selected');
+    else this.closest('.choice').classList.remove('selected');
+  });
+});
+
+// ── Progress updates ──
+const progressPcts = { 1:8, 2:32, 3:65, 4:100 };
+function setProgress(step){
+  document.getElementById('progress-fill').style.width = progressPcts[step] + '%';
+  for(let i=1;i<=4;i++){
+    const lbl = document.getElementById('lbl-'+i);
+    lbl.classList.remove('active','done');
+    if(i===step) lbl.classList.add('active');
+    else if(i<step) lbl.classList.add('done');
+  }
+}
+
+// ── Step navigation ──
+function goStep(target){
+  const current = parseInt(document.querySelector('.step.active').id.split('-')[1]);
+
+  if(target > current){
+    if(current === 1 && !validateStep1()) return;
+    if(current === 2 && !validateStep2()) return;
+    if(current === 3 && !validateStep3()) return;
+  }
+
+  // When entering Step 3, show the right question block
+  if(target === 3){
+    document.querySelectorAll('.qs-block').forEach(b => b.style.display = 'none');
+    const blockId = activeRole === 'attendant' ? 'qs-attendant' : activeRole === 'oso' ? 'qs-oso' : 'qs-admin';
+    document.getElementById(blockId).style.display = 'block';
+    const banner = document.getElementById('role-banner');
+    banner.style.display = 'block';
+    document.getElementById('role-banner-text').textContent = (selectedSchool ? selectedSchool.name : '') + ' — ' + (selectedSchool ? selectedSchool.role : '');
+  }
+
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + target).classList.add('active');
+  setProgress(target);
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+function validateStep1(){
+  let ok = true;
+  const required = ['full_name','dob','mobile','email','work_status','current_salary','expected_salary','notice_period'];
+  required.forEach(id => {
+    const el = document.querySelector(`[name="${id}"]`) || document.getElementById(id);
+    if(el && !el.value.trim()){ el.classList.add('error'); ok = false; }
+    else if(el){ el.classList.remove('error'); }
+  });
+  const ws = document.getElementById('work_status').value;
+  if(['Employment Pass','S Pass','Work Permit','Other'].includes(ws)){
+    const nat = document.querySelector('[name="nationality"]');
+    if(nat && !nat.value.trim()){ nat.classList.add('error'); ok = false; }
+    else if(nat){ nat.classList.remove('error'); }
+  }
+  document.getElementById('val-1').classList.toggle('show', !ok);
+  return ok;
+}
+
+function validateStep2(){
+  if(!selectedSchool){
+    document.getElementById('school-err').classList.add('show');
+    return false;
+  }
+  return true;
+}
+
+function validateStep3(){
+  let ok = true;
+  if(activeRole === 'admin'){
+    const sel = document.querySelector('[name="admin_years_exp"]');
+    if(sel && !sel.value){ sel.classList.add('error'); ok = false; } else if(sel) sel.classList.remove('error');
+    const sel2 = document.querySelector('[name="admin_ms_office"]');
+    if(sel2 && !sel2.value){ sel2.classList.add('error'); ok = false; } else if(sel2) sel2.classList.remove('error');
+    const sel3 = document.querySelector('[name="admin_education"]');
+    if(sel3 && !sel3.value){ sel3.classList.add('error'); ok = false; } else if(sel3) sel3.classList.remove('error');
+    if(!document.querySelector('input[name="admin_recep_pa"]:checked')) ok = false;
+    if(!document.querySelector('input[name="admin_early_start"]:checked')) ok = false;
+    if(!document.querySelector('input[name="admin_languages"]:checked')) ok = false;
+  } else if(activeRole === 'attendant'){
+    const sel = document.querySelector('[name="att_years_exp"]');
+    if(sel && !sel.value){ sel.classList.add('error'); ok = false; } else if(sel) sel.classList.remove('error');
+    if(!document.querySelector('input[name="att_duties"]:checked')) ok = false;
+    if(!document.querySelector('input[name="att_physical_ok"]:checked')) ok = false;
+    if(!document.querySelector('input[name="att_shift_ok"]:checked')) ok = false;
+    if(!document.querySelector('input[name="att_english"]:checked')) ok = false;
+  } else if(activeRole === 'oso'){
+    const sel = document.querySelector('[name="oso_years_exp"]');
+    if(sel && !sel.value){ sel.classList.add('error'); ok = false; } else if(sel) sel.classList.remove('error');
+    if(!document.querySelector('input[name="oso_duties"]:checked')) ok = false;
+    if(!document.querySelector('input[name="oso_physical_ok"]:checked')) ok = false;
+    if(!document.querySelector('input[name="oso_shift_ok"]:checked')) ok = false;
+    if(!document.querySelector('input[name="oso_english"]:checked')) ok = false;
+  }
+  document.getElementById('val-3').classList.toggle('show', !ok);
+  return ok;
+}
+
+// ── Form submit ──
+document.getElementById('screen-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const pdpa = document.getElementById('pdpa_consent');
+  if(!pdpa.checked){
+    document.getElementById('pdpa-err').classList.add('show');
+    document.getElementById('val-4').classList.add('show');
+    return;
+  }
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Submitting…';
+  btn.disabled = true;
+
+  const fd = new FormData(this);
+  fetch('https://formspree.io/f/mgopwjaj', {
+    method:'POST',
+    body: fd,
+    headers:{ Accept:'application/json' }
+  }).then(r => {
+    document.getElementById('screen-form').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+    document.getElementById('progress-fill').style.width = '100%';
+    window.scrollTo({top:0, behavior:'smooth'});
+  }).catch(() => {
+    document.getElementById('screen-form').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+setProgress(1);
+</script>
 </body>
 </html>
